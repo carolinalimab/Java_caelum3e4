@@ -1,0 +1,399 @@
+CAP 4 - EXERCÍCIO 2.1
+
+Teste:
+
+public class TesteAdicionaNoFim {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(a2);
+        
+        System.out.println(lista);
+    }
+}
+
+
+
+======================
+
+2.2
+
+Teste:
+public class TesteAdicionaPorPosicao {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        Aluno a3 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        a3.setNome("Ana");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(0, a2);
+        lista.adiciona(1, a3);
+        
+        System.out.println(lista);
+    }
+}
+========================
+
+2.3
+
+Teste:
+public class TestePegaPorPosicao {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(a2);
+        
+        Aluno aluno1 = lista.pega(0);
+        Aluno aluno2 = lista.pega(1);
+        
+        System.out.println(aluno1);
+        System.out.println(aluno2);
+    }
+}
+
+
+=======================
+
+2.4
+Teste:
+public class TesteRemovePorPosicao {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(a2);
+        
+        lista.remove(0);
+        
+        System.out.println(lista);
+    }
+}
+
+===========================
+
+2.5 
+Teste:
+public class TesteContemAluno {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(a2);
+        
+        System.out.println(lista.contem(a1));
+        System.out.println(lista.contem(a2));
+        
+        Aluno aluno = new Aluno();
+        aluno.setNome("Ana");
+        
+        System.out.println(lista.contem(aluno));
+    }
+}
+
+===========================
+
+2.6
+public class TesteTamanhoLista {
+    public static void main(String[] args) {
+        Aluno a1 = new Aluno();
+        Aluno a2 = new Aluno();
+        Aluno a3 = new Aluno();
+        
+        a1.setNome("Rafael");
+        a2.setNome("Paulo");
+        
+        Vetor lista = new Vetor();
+        lista.adiciona(a1);
+        lista.adiciona(a2);
+        
+        System.out.println(lista.tamanho());
+        
+        lista.adiciona(a3);
+        
+        System.out.println(lista.tamanho());
+    }
+}
+
+
+================================================
+
+public class Vetor {
+    private Aluno[] alunos = new Aluno[100000];
+    private int totalDeAlunos = 0;
+
+    // Método adiciona(Aluno) da primeira maneira vista
+    public void adiciona(Aluno aluno) {
+        for (int i = 0; i < this.alunos.length; i++) {
+            if (this.alunos[i] == null) {
+                this.alunos[i] = aluno;
+                this.totalDeAlunos++;
+                break;
+            }
+        }
+    }
+
+    // Método tamanho()
+    public int tamanho() {
+        return this.totalDeAlunos;
+    }
+
+    // Método contem() da primeira maneira vista
+    public boolean contem(Aluno aluno) {
+        for (int i = 0; i < this.alunos.length; i++) {
+            if (aluno.equals(this.alunos[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Método pega(int) da primeira maneira vista
+    public Aluno pega(int posicao) {
+        return this.alunos[posicao];
+    }
+
+    // Método adiciona(int, Aluno)
+    public void adiciona(int posicao, Aluno aluno) {
+        if (posicao < 0 || posicao > this.totalDeAlunos) {
+            throw new IllegalArgumentException("Posição inválida");
+        }
+
+        if (this.totalDeAlunos == this.alunos.length) {
+            garantaEspaco();
+        }
+
+        for (int i = this.totalDeAlunos - 1; i >= posicao; i--) {
+            this.alunos[i + 1] = this.alunos[i];
+        }
+
+        this.alunos[posicao] = aluno;
+        this.totalDeAlunos++;
+    }
+
+    // Método remove(int)
+    public void remove(int posicao) {
+        if (posicao < 0 || posicao >= this.totalDeAlunos) {
+            throw new IllegalArgumentException("Posição inválida");
+        }
+
+        for (int i = posicao; i < this.totalDeAlunos - 1; i++) {
+            this.alunos[i] = this.alunos[i + 1];
+        }
+
+        this.totalDeAlunos--;
+    }
+
+    // Método garantaEspaco()
+    private void garantaEspaco() {
+        if (this.totalDeAlunos == this.alunos.length) {
+            Aluno[] novaArray = new Aluno[this.alunos.length * 2];
+            for (int i = 0; i < this.alunos.length; i++) {
+                novaArray[i] = this.alunos[i];
+            }
+            this.alunos = novaArray;
+        }
+    }
+}
+
+TESTES:
+
+package br.com.caelum.ed.vetores;
+
+import br.com.caelum.ed.Aluno;
+
+public class TesteLinearVSConstante {
+    public static void main(String[] args) {
+        Vetor vetor = new Vetor();
+
+        long inicio = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+        }
+        long fim = System.currentTimeMillis();
+        double tempo = (fim - inicio) / 1000.0;
+        System.out.println("Tempo em segundos: " + tempo);
+    }
+}
+=====================================================
+
+package br.com.caelum.ed.vetores;
+
+import br.com.caelum.ed.Aluno;
+
+public class TesteLinearVSConstante {
+    public static void main(String[] args) {
+        Vetor vetor = new Vetor();
+
+        long inicio = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+        }
+        long fim = System.currentTimeMillis();
+        double tempo = (fim - inicio) / 1000.0;
+        System.out.println("Tempo em segundos: " + tempo);
+    }
+}
+
+
+Implementação da classe Vetor para objetos genéricos (com os métodos e atributos vistos neste capítulo na seção de generalização):
+
+public class Vetor<T> {
+    private T[] elementos;
+    private int totalDeElementos = 0;
+
+    public Vetor() {
+        this.elementos = (T[]) new Object[100000];
+    }
+
+    // Implemente os demais métodos conforme as necessidades
+}
+
+
+Utilização da classe Vetor nos exercícios anteriores e com as classes da API do Java (Vector ou ArrayList):
+
+import br.com.caelum.ed.Aluno;
+import java.util.Vector;
+import java.util.ArrayList;
+
+public class TesteUtilizacao {
+    public static void main(String[] args) {
+        // Usando a classe Vetor
+        Vetor<Aluno> vetor = new Vetor<>();
+        for (int i = 0; i < 1000; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+        }
+        System.out.println("Tamanho do Vetor: " + vetor.tamanho());
+
+        // Usando a classe Vector
+        Vector<Aluno> vector = new Vector<>();
+        for (int i = 0; i < vetor.tamanho(); i++) {
+            vector.add(vetor.pega(i));
+        }
+        System.out.println("Tamanho do Vector: " + vector.size());
+
+        // Usando a classe ArrayList
+        ArrayList<Aluno> arrayList = new ArrayList<>();
+        for (Aluno aluno : vector) {
+            arrayList.add(aluno);
+        }
+        System.out.println("Tamanho do ArrayList: " + arrayList.size());
+    }
+}
+
+
+==========================================================
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Aluno {
+    private String nome;
+    private int idade;
+    private String matricula;
+
+    public Aluno(String nome, int idade, String matricula) {
+        this.nome = nome;
+        this.idade = idade;
+        this.matricula = matricula;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    @Override
+    public String toString() {
+        return "Aluno{" +
+                "nome='" + nome + '\'' +
+                ", idade=" + idade +
+                ", matricula='" + matricula + '\'' +
+                '}';
+    }
+
+    public static void main(String[] args) {
+        // Criando a lista de alunos
+        List<Aluno> listaAlunos = new ArrayList<>();
+
+        // Adicionando alguns alunos à lista
+        listaAlunos.add(new Aluno("João", 20, "2021001"));
+        listaAlunos.add(new Aluno("Maria", 21, "2021002"));
+        listaAlunos.add(new Aluno("Pedro", 22, "2021003"));
+
+        // Imprimindo a lista de alunos
+        System.out.println("Lista de Alunos:");
+        for (Aluno aluno : listaAlunos) {
+            System.out.println(aluno);
+        }
+
+        // Alterando a posição de um aluno
+        alterarPosicaoAluno(listaAlunos, 2, 0);
+
+        // Imprimindo a lista de alunos após a alteração
+        System.out.println("\nLista de Alunos Após Alteração:");
+        for (Aluno aluno : listaAlunos) {
+            System.out.println(aluno);
+        }
+    }
+
+    // Método para alterar a posição de um aluno na lista
+    public static void alterarPosicaoAluno(List<Aluno> lista, int posicaoAtual, int novaPosicao) {
+        if (posicaoAtual < 0 || posicaoAtual >= lista.size() || novaPosicao < 0 || novaPosicao >= lista.size()) {
+            System.out.println("Posições inválidas.");
+            return;
+        }
+        Aluno aluno = lista.remove(posicaoAtual);
+        lista.add(novaPosicao, aluno);
+    }
+}
+
+
